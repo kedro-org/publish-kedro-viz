@@ -1,0 +1,39 @@
+# This workflow is used to test the GitHub action kedro-viz-share
+
+name: Test kedro-viz-share
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+on:
+  push:
+    branches:
+      - "*"
+    paths-ignore:
+      - "*.md"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch the repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Project Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          cd demo-project
+          pip install -r requirements.txt
+      - name: Deploy Kedro-Viz to GH Pages
+        uses: kedro-org/kedro-viz-share@main
+        with:
+          telemetry_consent: false
+          project_path: 'demo-project'
