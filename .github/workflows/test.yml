@@ -34,7 +34,7 @@ jobs:
           cd demo-project
           pip install -r requirements.txt
       - name: Deploy Kedro-Viz to GH Pages
-        uses: kedro-org/kedro-viz-share@main
+        uses: ./
         with:
           telemetry_consent: false
           project_path: 'demo-project'
