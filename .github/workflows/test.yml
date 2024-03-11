@@ -38,3 +38,4 @@ jobs:
         with:
           telemetry_consent: false
           project_path: 'demo-project'
+          publishing_source: 'workflow'
