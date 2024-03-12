@@ -28,7 +28,7 @@ A GitHub action which deploys your Kedro-Viz static site on GitHub pages. This a
 - **Kedro-project dependencies:** Install all the Kedro-project dependencies before using this action in your workflow
 - **Python-version:** You need to have an environment with `python>=3.9` in your workflow
 
-**NOTE:** While configuring your repository for GitHub Pages, you have two publishing source options. You can either choose a `branch` or `a custom GitHub Actions workflow`. If you choose a branch, the build artifacts will be uploaded to the `publish_branch` you pass as an input to the action, which defaults to `gh-pages`. If you choose a custom GitHub Actions workflow, you need to mention that in the input `publishing_source` to the action and no artifacts/branch will be created. Please find more information on configuring a publishing source for github pages site in the [official docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
+**NOTE:** While configuring your repository for GitHub Pages, you have two publishing source options. You can either choose a branch or a custom GitHub Actions workflow. If you choose a branch, the build artifacts will be uploaded to the `publish_branch` you pass as an input to the action, which defaults to `gh-pages`. If you choose a custom GitHub Actions workflow, you need to mention that in the input `publishing_source` to the action. In this case, no branch will be created and the artifacts are deployed at run-time. Please find more information on configuring a publishing source for github pages site in the [official docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 
 
 ## Usage
@@ -49,10 +49,6 @@ A GitHub action which deploys your Kedro-Viz static site on GitHub pages. This a
     # Default: true
     telemetry_consent: ''
 
-    # The python version used for the deployment. This should be `>=3.9`
-    # Default: '3.11'
-    python_version: ''
-
     # The publishing source for GitHub pages. This can be either 
     # 'branch' or 'workflow' based on your GitHub Pages configuration
     # Default: 'branch'
@@ -67,6 +63,11 @@ A GitHub action which deploys your Kedro-Viz static site on GitHub pages. This a
     # Defaults to your original commit message.
     # Default: ${{ github.event.head_commit.message }}
     commit_message: ''
+
+    # An option to publish branch with only the latest commit
+    # if your publishing_source is a branch.
+    # Default: true
+    force_orphan: ''
 
     # The git config user.name or the owner of the commit.
     # if your publishing_source is a branch.

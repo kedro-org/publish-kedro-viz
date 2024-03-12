@@ -16,13 +16,9 @@ inputs:
     required: false
     default: "."
   telemetry_consent:
-    description: "Set your consent if you would like to participate in Kedro-Telemetry. Defaults to true"
+    description: "Set your consent if you would like to participate in Kedro-Telemetry. Defaults to false"
     required: false
-    default: true
-  python_version:
-    description: "Set a version of python for the deployment. Defaults to 3.11"
-    required: false
-    default: "3.11"
+    default: false
   publishing_source:
     description: "Set a publishing source for GitHub pages. Defaults to branch"
     required: false
@@ -35,6 +31,10 @@ inputs:
     description: "Set a commit message for the deployment. Defaults to your original commit message."
     required: false
     default: ${{ github.event.head_commit.message }}
+  force_orphan:
+    description: "Set an option to publish branch with only the latest commit. Defaults to true"
+    required: false
+    default: true
   user_name:
     description: "Set git config user.name. Defaults to github-actions[bot]"
     required: false
@@ -47,13 +47,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # - name: Fetch the repository
-    #   uses: actions/checkout@v4
-    # - name: Set up Python
-    #   uses: actions/setup-python@v5
-    #   with:
-    #     python-version: ${{ inputs.python_version }}
-    #     cache: "pip"
     - name: Install Kedro-Viz
       run: |
         python -m pip install --upgrade pip
@@ -77,16 +70,16 @@ runs:
       with:
         github_token: ${{ inputs.github_token }}
         publish_branch: ${{ inputs.publish_branch }}
-        publish_dir: '${{ inputs.project_path }}/build'
+        publish_dir: "${{ inputs.project_path }}/build"
         user_name: ${{ inputs.user_name }}
         user_email: ${{ inputs.user_email }}
         commit_message: ${{ inputs.commit_message }}
-        force_orphan: true
-    - name: Upload Pages artifact
+        force_orphan: ${{ inputs.force_orphan }}
+    - name: Upload GitHub Pages artifact
       if: ${{ inputs.publishing_source == 'workflow' }}
       uses: actions/upload-pages-artifact@v3
       with:
-        path: '${{ inputs.project_path }}/build'
+        path: "${{ inputs.project_path }}/build"
     - name: Deploy to GitHub Pages
       if: ${{ inputs.publishing_source == 'workflow' }}
       uses: actions/deploy-pages@v4
