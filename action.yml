@@ -1,4 +1,4 @@
-name: kedro-viz-share
+name: publish-kedro-viz
 description: This is a GitHub action to publish kedro viz static website on GitHub Pages
 author: kedro-viz
 

@@ -1,6 +1,6 @@
-# This workflow is used to test the GitHub action kedro-viz-share
+# This workflow is used to test the GitHub action publish-kedro-viz
 
-name: Test kedro-viz-share
+name: Test publish-kedro-viz
 
 permissions:
   contents: write

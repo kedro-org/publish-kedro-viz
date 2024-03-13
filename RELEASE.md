@@ -1,6 +1,6 @@
 # Release 1.0.0:
 
-This is an initial release of kedro-viz-share action
+This is an initial release of publish-kedro-viz action
 
 ## Major features and improvements
 
