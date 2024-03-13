@@ -20,13 +20,16 @@ Live Demo: <a href="https://demo.kedro.org/" target="_blank">https://demo.kedro.
 
 ## Overview
 
-A GitHub action which deploys your Kedro-Viz static site on GitHub pages. This action helps in the automation of a deployment startegy mentioned in [platform agnostic sharing with Kedro-Viz](https://docs.kedro.org/projects/kedro-viz/en/v8.0.1/platform_agnostic_sharing_with_kedro_viz.html#static-website-hosting-platforms-such-as-github-pages)
+Kedro-viz-share is a GitHub action that simplifies the process of deploying Kedro-viz, which is a visual representation of your Kedro project, directly within the Git repository where your Kedro project is stored. By using this action, you can effortlessly showcase your Kedro-viz on GitHub Pages.
+
+This action helps in the automation of a deployment strategy mentioned in [platform agnostic sharing with Kedro-Viz](https://docs.kedro.org/projects/kedro-viz/en/v8.0.1/platform_agnostic_sharing_with_kedro_viz.html#static-website-hosting-platforms-such-as-github-pages)
 
 ## Prerequisites
 
+- **GitHub Repository:** A GitHub repository with your Kedro project.
 - **GitHub Pages Setup:** Configure your repository for [GitHub Pages](https://docs.github.com/en/pages/quickstart).
-- **Kedro-project dependencies:** Install all the Kedro-project dependencies before using this action in your workflow
-- **Python-version:** You need to have an environment with `python>=3.9` in your workflow
+- **Kedro-project dependencies:** Install all the Kedro-project dependencies before using this action in your workflow.
+- **Python-version:** You need to have an environment with `python>=3.9` in your workflow.
 
 **NOTE:** While configuring your repository for GitHub Pages, you have two publishing source options. You can either choose a branch or a custom GitHub Actions workflow. If you choose a branch, the build artifacts will be uploaded to the `publish_branch` you pass as an input to the action, which defaults to `gh-pages`. If you choose a custom GitHub Actions workflow, you need to mention that in the input `publishing_source` to the action. In this case, no branch will be created and the artifacts are deployed at run-time. Please find more information on configuring a publishing source for github pages site in the [official docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 
@@ -149,9 +152,9 @@ A GitHub action which deploys your Kedro-Viz static site on GitHub pages. This a
 
 After you've completed the configuration, trigger the workflow as per the workflow trigger condition.
 
-- The GitHub workflow `Publish and share Kedro Viz` should start. You can find it in the Actions tab with your commit message.
-- Once the workflow is successfully completed, the artifacts of your Kedro-Viz static site will be uploaded to the `publish-branch` input specified to the action if your GitHub pages publishing source is branch.
-- If your GitHub pages publishing source is a custom GitHub Actions workflow, you need to select the above workflow `.github/workflows/kedro-viz-share.yml` as the source.
+- Once triggered, the GitHub workflow "Publish and share Kedro Viz" will automatically start and can be found in the Actions tab with your commit message.
+- If your GitHub Pages publishing source is a branch, then the artifacts of your Kedro-Viz static site will be uploaded to the publish-branch input specified in the action upon successful completion of the workflow.
+- If your GitHub Pages publishing source is a custom GitHub Actions workflow, then the artifacts of your Kedro-Viz static site will be uploaded and deployed during the workflow run-time.
 - You can access the static site at `http://<username>.github.io/<repo-name>`
 
 ## Credits
