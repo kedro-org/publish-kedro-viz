@@ -1,0 +1,8 @@
+{
+  "type": "pandas.excel_dataset.ExcelDataset",
+  "filepath": "/home/runner/work/publish-kedro-viz/publish-kedro-viz/demo-project/data/01_raw/shuttles.xlsx",
+  "run_command": null,
+  "preview": null,
+  "preview_type": "TablePreview",
+  "stats": null
+}
