@@ -1,7 +1,16 @@
 # Publish-kedro-viz
 
-![Kedro Logo Banner - Light](https://raw.githubusercontent.com/kedro-org/kedro/main/.github/demo-dark.png#gh-dark-mode-only)
-![Kedro Logo Banner - Dark](https://raw.githubusercontent.com/kedro-org/kedro/main/.github/demo-light.png#gh-light-mode-only)
+<picture>
+  <source
+    srcset="https://raw.githubusercontent.com/kedro-org/kedro/main/.github/demo-light.png"
+    media="(prefers-color-scheme: light)"
+  />
+  <source
+    srcset="https://raw.githubusercontent.com/kedro-org/kedro/main/.github/demo-dark.png"
+    media="(prefers-color-scheme: dark)"
+  />
+  <img alt="Shows Kedro logo" src="https://raw.githubusercontent.com/kedro-org/kedro/main/.github/demo-light.png" />
+</picture>
 
 <br />
 <p align="center">
