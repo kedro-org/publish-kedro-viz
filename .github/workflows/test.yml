@@ -16,6 +16,7 @@ on:
   pull_request:
     branches:
       - main
+      - feature/include-hooks
   workflow_dispatch:
 
 jobs:
