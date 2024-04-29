@@ -15,6 +15,10 @@ inputs:
     description: "Set your Kedro-project path to build the Kedro-Viz artifacts."
     required: false
     default: "."
+  include_hooks:
+    description: "Set whether to include hooks while creating your Kedro-project build artifacts."
+    required: false
+    default: false
   telemetry_consent:
     description: "Set your consent if you would like to participate in Kedro-Telemetry. Defaults to false"
     required: false
@@ -57,10 +61,24 @@ runs:
         cd ${{ inputs.project_path }}
         echo 'consent: ${{ inputs.telemetry_consent }}' > .telemetry
       shell: bash
+    - name: Create build flags
+      id: create_build_flags
+      run: |
+        flag=""
+        if [ "${{ inputs.include_hooks }}" = "true" ]; then
+          flag="$flag --include-hooks"
+        fi
+    
+        echo "::set-output name=flags::$flag"
     - name: Create build directory
       run: |
         cd ${{ inputs.project_path }}
-        if !(kedro viz build |& tee /dev/stderr | grep -i -q "Success!"); then
+        if ${{ inputs.include_hooks }}; then
+          flag="--include-hooks"
+        else
+          flag=""
+        fi
+        if !(kedro viz build ${{ steps.create_build_flags.outputs.flags }} |& tee /dev/stderr | grep -i -q "Success!"); then
           exit 1
         fi
       shell: bash
