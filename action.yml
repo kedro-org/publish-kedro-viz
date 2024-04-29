@@ -70,6 +70,7 @@ runs:
         fi
     
         echo "::set-output name=flags::$flag"
+      shell: bash
     - name: Create build directory
       run: |
         cd ${{ inputs.project_path }}
