@@ -1,3 +1,9 @@
+# Release 1.1.0:
+
+## Major features and improvements
+
+- Add `include_hooks` input for the action
+
 # Release 1.0.0:
 
 This is an initial release of publish-kedro-viz action
