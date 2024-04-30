@@ -68,20 +68,16 @@ runs:
         if [ "${{ inputs.include_hooks }}" = "true" ]; then
           flag="$flag --include-hooks"
         fi
-    
-        echo "::set-output name=flags::$flag"
+        echo "flags=$flag" >> $GITHUB_ENV
       shell: bash
     - name: Create build directory
       run: |
         cd ${{ inputs.project_path }}
-        if ${{ inputs.include_hooks }}; then
-          flag="--include-hooks"
-        else
-          flag=""
-        fi
-        if !(kedro viz build ${{ steps.create_build_flags.outputs.flags }} |& tee /dev/stderr | grep -i -q "Success!"); then
+        if !(kedro viz build $flags |& tee /dev/stderr | grep -i -q "Success!"); then
           exit 1
         fi
+      env:
+        flags: ${{ env.flags }}
       shell: bash
     - name: Deploy to GitHub Pages with publish branch as source
       if: ${{ inputs.publishing_source == 'branch' }}
