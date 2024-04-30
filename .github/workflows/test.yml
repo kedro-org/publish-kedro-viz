@@ -40,3 +40,4 @@ jobs:
         uses: ./
         with:
           project_path: "demo-project"
+          include_hooks: true

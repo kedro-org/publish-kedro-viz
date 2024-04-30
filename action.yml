@@ -64,7 +64,7 @@ runs:
     - name: Create build flags
       run: |
         flag=""
-        if [ "${{ inputs.include_hooks }}" = "true" ]; then
+        if ${{ inputs.include_hooks }}; then
           flag="$flag --include-hooks"
         fi
         echo "build_flags=$flag" >> $GITHUB_ENV
