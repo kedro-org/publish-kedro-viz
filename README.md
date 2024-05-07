@@ -56,6 +56,10 @@ This action helps in the automation of a deployment strategy mentioned in [platf
     # The Kedro-project path to build the Kedro-Viz artifacts.
     # Default: '.'
     project_path: ''
+
+    # The flag to include hooks while creating your Kedro-project build artifacts.
+    # Default: false
+    include_hooks: ''
     
     # Your consent to participate in Kedro-Telemetry.
     # Default: true
