@@ -21,6 +21,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment:
+        name: github-pages
     steps:
       - name: Fetch the repository
         uses: actions/checkout@v4
