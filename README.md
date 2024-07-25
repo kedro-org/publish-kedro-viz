@@ -106,7 +106,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
   ```
 
 > [!Important]
-> From publish-kedro-viz@v2, we recommend you to choose a custom GitHub Actions workflow as a publishing source for GitHub Pages. No build artifacts will be pushed to a branch starting from publish-kedro-viz@v2.
+> From `publish-kedro-viz@v2`, we recommend you to choose a custom GitHub Actions workflow as a publishing source for GitHub Pages. No build artifacts will be pushed to a branch starting from `publish-kedro-viz@v2`.
 
 2. With `kedro-org/publish-kedro-viz@v2`:
 
