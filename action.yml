@@ -47,7 +47,9 @@ runs:
         if !(kedro viz build ${{ env.build_flags }} |& tee /dev/stderr | grep -i -q "Success!"); then
           exit 1
         fi
-      shell: bash   
+      shell: bash
+    - name: Setup Pages
+      uses: actions/configure-pages@v5 
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v3
       with:
@@ -56,5 +58,4 @@ runs:
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v4
       with:
-        token: ${{ github.token }}
         artifact_name: github-pages-${{ github.sha }}
