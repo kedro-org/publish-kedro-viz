@@ -43,15 +43,37 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 > [!NOTE]
 > While configuring your repository for GitHub Pages, you have two publishing source options. You can either choose a branch or a custom GitHub Actions workflow (recommended). 
 > If you choose a branch, the build artifacts will be uploaded to the `publish_branch` you pass as an input to the action, which defaults to `gh-pages`. 
-> If you choose a custom GitHub Actions workflow, you need to mention that in the input `publishing_source` to the action (this is made as default from v2). In this case, no branch will be created and the artifacts are deployed at run-time. 
+> If you choose a custom GitHub Actions workflow, you need to mention that in the input `publishing_source` to the action. In this case, no branch will be created and the artifacts are deployed at run-time.
 
 > [!TIP]
 > Please find more information on configuring a publishing source for github pages site in the [official docs](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 
+> [!Important]
+> From `publish-kedro-viz@v2`, we only support custom GitHub Actions workflow as a publishing source for GitHub Pages.
 
 ## Usage
 
-1. With `kedro-org/publish-kedro-viz@v1`:
+1. With `kedro-org/publish-kedro-viz@v2`:
+
+  ```yaml
+
+  - uses: kedro-org/publish-kedro-viz@v2
+    with:
+      # The Kedro-project path to build the Kedro-Viz artifacts.
+      # Default: '.'
+      project_path: ''
+
+      # The flag to include hooks while creating your Kedro-project build artifacts.
+      # Default: false
+      include_hooks: ''
+      
+      # Your consent to participate in Kedro-Telemetry.
+      # Default: true
+      telemetry_consent: ''
+    
+  ```
+
+2. With `kedro-org/publish-kedro-viz@v1`:
 
   ```yaml
 
@@ -103,29 +125,6 @@ This action helps in the automation of a deployment strategy mentioned in [platf
       # Default: 'github-actions[bot]@users.noreply.github.com'
       user_email: ''
 
-  ```
-
-> [!Important]
-> From `publish-kedro-viz@v2`, we recommend you to choose a custom GitHub Actions workflow as a publishing source for GitHub Pages. No build artifacts will be pushed to a branch starting from `publish-kedro-viz@v2`.
-
-2. With `kedro-org/publish-kedro-viz@v2`:
-
-  ```yaml
-
-  - uses: kedro-org/publish-kedro-viz@v2
-    with:
-      # The Kedro-project path to build the Kedro-Viz artifacts.
-      # Default: '.'
-      project_path: ''
-
-      # The flag to include hooks while creating your Kedro-project build artifacts.
-      # Default: false
-      include_hooks: ''
-      
-      # Your consent to participate in Kedro-Telemetry.
-      # Default: true
-      telemetry_consent: ''
-    
   ```
 
 ## Configure the action
@@ -185,7 +184,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
                         pip install -r requirements.txt
                       # Using the action
                     - name: Deploy Kedro-Viz to GH Pages 
-                      uses: kedro-org/publish-kedro-viz@v1
+                      uses: kedro-org/publish-kedro-viz@v2
                       with:
                         # This is not required if your Kedro Project 
                         # is at the root of your GitHub Repository
@@ -198,7 +197,7 @@ After you've completed the configuration, trigger the workflow as per the workfl
 
 - Once triggered, the GitHub workflow "Publish and share Kedro Viz" will automatically start and can be found in the Actions tab with your commit message.
 - If your GitHub Pages publishing source is a custom GitHub Actions workflow (recommended), then the artifacts of your Kedro-Viz static site will be uploaded and deployed during the workflow run-time.
-- If your GitHub Pages publishing source is a branch, then the artifacts of your Kedro-Viz static site will be uploaded to the publish-branch input specified in the action upon successful completion of the workflow. Please note that starting v2, we will not upload artifacts to a branch. You can still use publishing source as a branch for GitHub Pages (not recommended) and make sure you follow the security considerations mentioned [here](https://github.com/actions/deploy-pages?tab=readme-ov-file#security-considerations).
+- If your GitHub Pages publishing source is a branch, then the artifacts of your Kedro-Viz static site will be uploaded to the publish-branch input specified in the action upon successful completion of the workflow. Please note that starting from v2, we will not support GitHub Pages publishing source as a branch.
 - You can access the static site at `http://<username>.github.io/<repo-name>`, if your site's visibility is public. For more information on changing the visibility, you can follow the [official docs](https://docs.github.com/en/enterprise-cloud@latest/pages/getting-started-with-github-pages/changing-the-visibility-of-your-github-pages-site)
 
 ## Credits
