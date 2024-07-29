@@ -135,7 +135,8 @@ This action helps in the automation of a deployment strategy mentioned in [platf
    2. Add the following code to the workflow file:
 
     ```yaml
-        # An example workflow configuration
+        # An example workflow configuration assuming your kedro project is 
+        # at the root directory
 
         # The name of your workflow
         name: Publish and share Kedro Viz 
@@ -178,17 +179,11 @@ This action helps in the automation of a deployment strategy mentioned in [platf
                     - name: Install Project Dependencies
                       run: |
                         python -m pip install --upgrade pip
-                        # This is not required if your Kedro Project 
-                        # is at the root of your GitHub Repository
-                        cd demo-project 
                         pip install -r requirements.txt
                       # Using the action
                     - name: Deploy Kedro-Viz to GH Pages 
                       uses: kedro-org/publish-kedro-viz@v2
-                      with:
-                        # This is not required if your Kedro Project 
-                        # is at the root of your GitHub Repository
-                        project_path: 'demo-project'     
+
     ```
 
 ## Test the action
