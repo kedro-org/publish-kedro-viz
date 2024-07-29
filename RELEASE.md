@@ -1,3 +1,10 @@
+# Release 2.0.0:
+
+## Major features and improvements
+
+- Remove usage of `peaceiris/actions-gh-pages`
+- Update README file
+
 # Release 1.1.0:
 
 ## Major features and improvements
