@@ -35,6 +35,8 @@ jobs:
           kedro new --starter=spaceflights-pandas --name=demo-project
           cd demo-project
           pip install -r requirements.txt
+          python -m pip uninstall kedro-viz
+          python -m pip install "kedro-viz==9.2.0"
       - name: Deploy Kedro-Viz to GH Pages
         uses: ./
         with:
