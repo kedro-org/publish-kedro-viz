@@ -32,7 +32,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install "kedro>=0.19.3"
-          kedro new --starter=spaceflights-pandas-viz --name=demo-project
+          kedro new --starter=spaceflights-pandas --name=demo-project
           cd demo-project
           pip install -r requirements.txt
       - name: Deploy Kedro-Viz to GH Pages
