@@ -19,14 +19,22 @@ inputs:
     description: "Set your consent if you would like to participate in Kedro-Telemetry. Defaults to false"
     required: false
     default: false
+  python_manager:
+    description: "Set the Python package manager to use ('pip' or 'uv'). Defaults to 'pip'"
+    required: false
+    default: "pip"
 
 runs:
   using: "composite"
   steps:
     - name: Install Kedro-Viz
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install "kedro-viz>=7.1.0"
+        if [ "${{ inputs.python_manager }}" = "uv" ]; then
+          uv add "kedro-viz>=7.1.0"
+        else
+          python -m pip install --upgrade pip
+          python -m pip install "kedro-viz>=7.1.0"
+        fi
       shell: bash
     - name: Consent to the use of Kedro-Telemetry
       run: |
@@ -44,8 +52,14 @@ runs:
     - name: Create build directory
       run: |
         cd ${{ inputs.project_path }}
-        if !(kedro viz build ${{ env.build_flags }} |& tee /dev/stderr | grep -i -q "Success!"); then
-          exit 1
+        if [ "${{ inputs.python_manager }}" = "uv" ]; then
+          if !(uv run kedro viz build ${{ env.build_flags }} |& tee /dev/stderr | grep -i -q "Success!"); then
+            exit 1
+          fi
+        else
+          if !(kedro viz build ${{ env.build_flags }} |& tee /dev/stderr | grep -i -q "Success!"); then
+            exit 1
+          fi
         fi
       shell: bash
     - name: Upload GitHub Pages artifact

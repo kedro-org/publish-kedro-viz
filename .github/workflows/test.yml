@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-pip:
     runs-on: ubuntu-latest
     steps:
       - name: Fetch the repository
@@ -35,7 +35,33 @@ jobs:
           kedro new --starter=spaceflights-pandas-viz --name=demo-project
           cd demo-project
           pip install -r requirements.txt
-      - name: Deploy Kedro-Viz to GH Pages
+      - name: Deploy Kedro-Viz to GH Pages (pip)
         uses: ./
         with:
           project_path: "demo-project"
+          python_manager: "pip"
+
+  test-uv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch the repository
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install 3.11
+      - name: Create a Kedro Project and install project dependencies
+        run: |
+          uv tool install "kedro>=0.19.3"
+          kedro new --starter=spaceflights-pandas-viz --name=demo-project
+          cd demo-project
+          uv init --no-readme
+          uv add kedro
+          uv sync
+      - name: Deploy Kedro-Viz to GH Pages (uv)
+        uses: ./
+        with:
+          project_path: "demo-project"
+          python_manager: "uv"
