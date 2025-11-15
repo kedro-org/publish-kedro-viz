@@ -57,10 +57,9 @@ jobs:
           uv tool install "kedro>=0.19.3"
           kedro new --starter=spaceflights-pandas --name=demo-project
           cd demo-project
-          uv venv
-          uv pip install -r requirements.txt
+          uv pip install --system -r requirements.txt
       - name: Deploy Kedro-Viz to GH Pages (uv)
         uses: ./
         with:
           project_path: "demo-project"
-          python_manager: "pip"
+          python_manager: "uv"
