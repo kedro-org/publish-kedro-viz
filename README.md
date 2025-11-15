@@ -15,7 +15,7 @@
 <br />
 <p align="center">
 
-![Kedro-Viz Pipeline Visualisation](https://raw.githubusercontent.com/kedro-org/kedro-viz/main/.github/img/banner.png)
+![Kedro-Viz Pipeline Visualisation](https://raw.githubusercontent.com/kedro-org/kedro-viz/main/.github/img/banner.gif?v=1)
 
 </p>
 
@@ -31,7 +31,7 @@ Live Demo: <a href="https://demo.kedro.org/" target="_blank">https://demo.kedro.
 
 Publish-kedro-viz is a GitHub action that simplifies the process of deploying Kedro-viz, which is a visual representation of your Kedro project, directly within the Git repository where your Kedro project is stored. By using this action, you can effortlessly showcase your Kedro-viz on GitHub Pages.
 
-This action helps in the automation of a deployment strategy mentioned in [platform agnostic sharing with Kedro-Viz](https://docs.kedro.org/projects/kedro-viz/en/v8.0.1/platform_agnostic_sharing_with_kedro_viz.html#static-website-hosting-platforms-such-as-github-pages)
+This action helps in the automation of a deployment strategy mentioned in [platform agnostic sharing with Kedro-Viz](https://docs.kedro.org/projects/kedro-viz/en/stable/platform_agnostic_sharing_with_kedro_viz/)
 
 ## Prerequisites
 
