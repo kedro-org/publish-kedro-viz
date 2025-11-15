@@ -53,7 +53,31 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 
 ## Usage
 
-1. With `kedro-org/publish-kedro-viz@v2`:
+1. With `kedro-org/publish-kedro-viz@v3`:
+
+  ```yaml
+
+  - uses: kedro-org/publish-kedro-viz@v3
+    with:
+      # The Kedro-project path to build the Kedro-Viz artifacts.
+      # Default: '.'
+      project_path: ''
+
+      # The flag to include hooks while creating your Kedro-project build artifacts.
+      # Default: false
+      include_hooks: ''
+      
+      # Your consent to participate in Kedro-Telemetry.
+      # Default: false
+      telemetry_consent: ''
+
+      # The Python package manager to use ('pip' or 'uv').
+      # Default: 'pip'
+      python_manager: ''
+    
+  ```
+
+2. With `kedro-org/publish-kedro-viz@v2`:
 
   ```yaml
 
@@ -73,7 +97,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
     
   ```
 
-2. With `kedro-org/publish-kedro-viz@v1`:
+3. With `kedro-org/publish-kedro-viz@v1`:
 
   ```yaml
 
@@ -182,9 +206,47 @@ This action helps in the automation of a deployment strategy mentioned in [platf
                         pip install -r requirements.txt
                       # Using the action
                     - name: Deploy Kedro-Viz to GH Pages 
-                      uses: kedro-org/publish-kedro-viz@v2
+                      uses: kedro-org/publish-kedro-viz@v3
 
     ```
+
+### Using with uv
+
+If your project uses [uv](https://docs.astral.sh/uv/) for dependency management, you can configure the workflow like this:
+
+```yaml
+name: Publish and share Kedro Viz 
+
+permissions:
+  pages: write 
+  id-token: write
+
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs: 
+  deploy:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Fetch the repository
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Set up Python
+        run: uv python install 3.11
+      - name: Install Project Dependencies
+        run: |
+          cd your-project-path
+          uv pip install -r requirements.txt
+      - name: Deploy Kedro-Viz to GH Pages 
+        uses: kedro-org/publish-kedro-viz@v3
+        with:
+          project_path: "your-project-path"
+          python_manager: "uv"
+```
 
 ## Test the action
 
