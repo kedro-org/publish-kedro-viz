@@ -29,9 +29,15 @@ runs:
   steps:
     - name: Install Kedro-Viz
       run: |
+        cd ${{ inputs.project_path }}
         if [ "${{ inputs.python_manager }}" = "uv" ]; then
-          uv add "kedro-viz>=7.1.0"
+          # For uv, try uv add first (for proper uv projects), fallback to uv pip install
+          if ! uv add "kedro-viz>=7.1.0" 2>/dev/null; then
+            echo "uv add failed, falling back to uv pip install..."
+            uv pip install "kedro-viz>=7.1.0"
+          fi
         else
+          # For pip, use the traditional approach
           python -m pip install --upgrade pip
           python -m pip install "kedro-viz>=7.1.0"
         fi
