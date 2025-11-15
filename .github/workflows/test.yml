@@ -63,4 +63,4 @@ jobs:
         uses: ./
         with:
           project_path: "demo-project"
-          python_manager: "uv"
+          python_manager: "pip"
