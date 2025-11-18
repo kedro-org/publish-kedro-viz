@@ -108,6 +108,10 @@ runs:
           fi
         else
           echo "GitHub Pages is enabled, proceeding to deployment."
+        fi
+        
+        # Clean up
+        rm -f /tmp/pages_response.json
       shell: bash
     - name: Upload GitHub Pages artifact
       run: |
