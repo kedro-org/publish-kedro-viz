@@ -269,6 +269,46 @@ We use the GitHub action [peaceiris/actions-gh-pages](https://github.com/peaceir
 
 We use the GitHub actions [actions/upload-pages-artifact](https://github.com/actions/upload-pages-artifact) and [actions/deploy-pages](https://github.com/actions/deploy-pages) which are released under MIT license.
 
+## Privacy and Data Protection
+
+### Privacy Notice
+
+**No personal data is collected or stored by this GitHub Action.** This Action only processes your Kedro project files locally within the GitHub Actions runner environment to generate static visualization artifacts.
+
+### Data Processing Summary
+
+- **Data Processed**: Kedro project configuration files, pipeline definitions, and metadata
+- **Processing Location**: GitHub Actions runner (ephemeral environment)
+- **Data Storage**: No persistent data storage by this Action
+- **Data Transmission**: Only static HTML/JS/CSS artifacts uploaded to GitHub Pages
+
+### Telemetry and Opt-Out
+
+This Action includes an optional telemetry feature that can send usage data to Kedro-Viz:
+
+- **Default Setting**: Telemetry is **disabled by default** (`telemetry_consent: false`)
+- **Opt-In Required**: You must explicitly set `telemetry_consent: true` to enable
+- **Data Sent**: Anonymous usage statistics about Kedro-Viz features used
+- **Opt-Out Instructions**: Keep `telemetry_consent: false` (default) or omit the parameter
+
+**To disable telemetry explicitly:**
+```yaml
+- uses: kedro-org/publish-kedro-viz@v3
+  with:
+    telemetry_consent: false  # Explicitly disable (default)
+```
+
+### GDPR/CCPA Compliance
+
+This Action complies with GitHub's Data Protection Addendum and applicable data protection regulations:
+
+- No personal data collection or processing
+- No cookies or tracking mechanisms
+- No data retention beyond GitHub Actions job execution
+- Processing limited to generating static visualizations
+
+For questions about data protection, please contact: kedro-framework@mckinsey.com
+
 ## License
 
 publish-kedro-viz is licensed under the [Apache 2.0](https://github.com/kedro-org/publish-kedro-viz/blob/main/LICENSE.md) License.
