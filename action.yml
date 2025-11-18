@@ -14,11 +14,11 @@ inputs:
   include_hooks:
     description: "Set whether to include hooks while creating your Kedro-project build artifacts."
     required: false
-    default: false
+    default: "false"
   telemetry_consent:
     description: "Set your consent if you would like to participate in Kedro-Telemetry. Defaults to false"
     required: false
-    default: false
+    default: "false"
   python_manager:
     description: "Set the Python package manager to use ('pip' or 'uv'). Defaults to 'pip'"
     required: false
@@ -57,12 +57,16 @@ runs:
     - name: Consent to the use of Kedro-Telemetry
       run: |
         cd ${{ inputs.project_path }}
-        echo 'consent: ${{ inputs.telemetry_consent }}' > .telemetry
+        if [ "${{ inputs.telemetry_consent }}" = "true" ]; then
+          echo 'consent: true' > .telemetry
+        else
+          echo 'consent: false' > .telemetry
+        fi
       shell: bash
     - name: Create build flags
       run: |
         flag=""
-        if ${{ inputs.include_hooks }}; then
+        if [ "${{ inputs.include_hooks }}" = "true" ]; then
           flag="$flag --include-hooks"
         fi
         echo "build_flags=$flag" >> $GITHUB_ENV
@@ -85,23 +89,43 @@ runs:
       run: |
         echo "Checking GitHub Pages configuration..."
         
-        # Check if Pages is enabled via GitHub API
-        PAGES_STATUS=$(curl -s -H "Authorization: token ${{ github.token }}" \
+        # Check if Pages is enabled via GitHub API with proper error handling
+        HTTP_CODE=$(curl -s -w "%{http_code}" -H "Authorization: token ${{ github.token }}" \
           "https://api.github.com/repos/${{ github.repository }}/pages" \
-          | jq -r '.status // "disabled"')
+          -o /tmp/pages_response.json)
         
-        if [ "$PAGES_STATUS" = "disabled" ] || [ "$PAGES_STATUS" = "null" ]; then
-          echo "WARNING: GitHub Pages is not configured for this repository."
-          echo "Please configure GitHub Pages in repository settings before deploying."
+        echo "GitHub Pages API response code: $HTTP_CODE"
+        
+        if [ "$HTTP_CODE" = "404" ]; then
+          echo "WARNING: GitHub Pages is not enabled for this repository."
+          echo "Please enable GitHub Pages in repository settings before deploying."
+          echo "Go to Settings > Pages and configure a publishing source."
           echo "To skip this check, set deployment_branch_check: false"
           
           if [ "${{ inputs.auto_deploy }}" = "true" ]; then
-            echo "Deployment cancelled due to Pages not being configured."
+            echo "Deployment cancelled - GitHub Pages is not enabled."
             exit 1
           fi
+        elif [ "$HTTP_CODE" = "200" ]; then
+          # Check if jq is available for JSON parsing
+          if command -v jq >/dev/null 2>&1; then
+            PAGES_STATUS=$(cat /tmp/pages_response.json | jq -r '.status // "unknown"')
+            echo "GitHub Pages is enabled. Status: $PAGES_STATUS"
+          else
+            echo "GitHub Pages is enabled (API returned 200)."
+          fi
         else
-          echo "GitHub Pages is configured and ready."
+          echo "Unable to check GitHub Pages status (HTTP $HTTP_CODE)."
+          echo "This might be due to insufficient permissions."
+          
+          if [ "${{ inputs.auto_deploy }}" = "true" ]; then
+            echo "Proceeding with deployment despite check failure."
+            echo "If deployment fails, please verify GitHub Pages is enabled."
+          fi
         fi
+        
+        # Clean up
+        rm -f /tmp/pages_response.json
       shell: bash
     - name: Upload GitHub Pages artifact
       run: |
