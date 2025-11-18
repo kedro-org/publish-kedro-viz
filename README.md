@@ -38,7 +38,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 - **GitHub Repository:** A GitHub repository with your Kedro project.
 - **GitHub Pages Setup:** Configure your repository for [GitHub Pages](https://docs.github.com/en/pages/quickstart).
 - **Kedro-project dependencies:** Install all the Kedro-project dependencies before using this action in your workflow.
-- **Python-version:** You need to have an environment with `python>=3.9` in your workflow.
+- **Python-version:** You need to have an environment with `python>=3.10` in your workflow.
 
 > [!NOTE]
 > While configuring your repository for GitHub Pages, you have two publishing source options. You can either choose a branch or a custom GitHub Actions workflow (recommended). 
@@ -50,6 +50,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 
 > [!Important]
 > From `publish-kedro-viz@v2`, we only support custom GitHub Actions workflow as a publishing source for GitHub Pages.
+> From `publish-kedro-viz@v3`, we introduced inputs to support uv managed kedro projects, deployment safety checks and dropped python 3.9 support.
 
 ## Usage
 
@@ -161,7 +162,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 
   ```
 
-## Deployment Control Options
+## Deployment Control Options (from v3)
 
 ### Auto-Deploy Control
 
@@ -205,7 +206,10 @@ By default, this action automatically deploys to GitHub Pages after building art
             
             # The contents write permission is required to use the action 
             # if your GitHub publishing source is a branch
-            contents: write 
+            
+            # The contents read permission is required to use the action
+            # if your GitHub publishing source is a workflow
+            contents: read 
             
             # The pages and id-token write permissions are required to use 
             # the action if your GitHub publishing source is a custom 
@@ -250,39 +254,40 @@ By default, this action automatically deploys to GitHub Pages after building art
 
 If your project uses [uv](https://docs.astral.sh/uv/) for dependency management, you can configure the workflow like this:
 
-```yaml
-name: Publish and share Kedro Viz 
+    ```yaml
+    name: Publish and share Kedro Viz 
 
-permissions:
-  pages: write 
-  id-token: write
+    permissions:
+      contents: read
+      pages: write 
+      id-token: write
 
-on: 
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+    on: 
+      push:
+        branches:
+          - main
+      workflow_dispatch:
 
-jobs: 
-  deploy:
-    runs-on: ubuntu-latest 
-    steps:
-      - name: Fetch the repository
-        uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-      - name: Set up Python
-        run: uv python install 3.11
-      - name: Install Project Dependencies
-        run: |
-          cd your-project-path
-          uv pip install -r requirements.txt
-      - name: Deploy Kedro-Viz to GH Pages 
-        uses: kedro-org/publish-kedro-viz@v3
-        with:
-          project_path: "your-project-path"
-          python_manager: "uv"
-```
+    jobs: 
+      deploy:
+        runs-on: ubuntu-latest 
+        steps:
+          - name: Fetch the repository
+            uses: actions/checkout@v4
+          - name: Install uv
+            uses: astral-sh/setup-uv@v3
+          - name: Set up Python
+            run: uv python install 3.11
+          - name: Install Project Dependencies
+            run: |
+              cd your-project-path
+              uv pip install -r requirements.txt
+          - name: Deploy Kedro-Viz to GH Pages 
+            uses: kedro-org/publish-kedro-viz@v3
+            with:
+              project_path: "your-project-path"
+              python_manager: "uv"
+    ```
 
 ## Test the action
 
