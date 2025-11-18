@@ -27,4 +27,4 @@ jobs:
     - name: Download and run actionlint
       run: |
         bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-        ./actionlint .github/workflows/ action.yml
+        ./actionlint .github/workflows/test.yml action.yml
