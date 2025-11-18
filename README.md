@@ -74,6 +74,16 @@ This action helps in the automation of a deployment strategy mentioned in [platf
       # The Python package manager to use ('pip' or 'uv').
       # Default: 'pip'
       python_manager: ''
+
+      # Control automatic deployment to GitHub Pages.
+      # Set to 'false' to only build artifacts without deploying.
+      # Default: 'true'
+      auto_deploy: ''
+
+      # Check if GitHub Pages is configured before deploying.
+      # Set to 'false' to skip safety checks.
+      # Default: 'true'
+      deployment_branch_check: ''
     
   ```
 
@@ -150,6 +160,32 @@ This action helps in the automation of a deployment strategy mentioned in [platf
       user_email: ''
 
   ```
+
+## Deployment Control Options
+
+### Auto-Deploy Control
+
+By default, this action automatically deploys to GitHub Pages after building artifacts. You can control this behavior:
+
+**Build Only (No Deploy):**
+```yaml
+- uses: kedro-org/publish-kedro-viz@v3
+  with:
+    auto_deploy: false  # Only build artifacts, don't deploy
+```
+
+**Skip Safety Checks:**
+```yaml
+- uses: kedro-org/publish-kedro-viz@v3
+  with:
+    deployment_branch_check: false  # Skip GitHub Pages configuration check
+```
+
+### Safety Features
+
+- **GitHub Pages Configuration Check**: Verifies Pages is configured before deploying
+- **Opt-out Control**: Set `auto_deploy: false` to prevent automatic deployment
+- **Clear Feedback**: Action provides clear messages about deployment status
 
 ## Configure the action
 

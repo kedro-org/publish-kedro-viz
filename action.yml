@@ -23,6 +23,18 @@ inputs:
     description: "Set the Python package manager to use ('pip' or 'uv'). Defaults to 'pip'"
     required: false
     default: "pip"
+  auto_deploy:
+    description: >
+      Control automatic deployment to GitHub Pages. Set to 'false' to only
+      build and upload artifacts without deploying. Defaults to 'true'
+    required: false
+    default: "true"
+  deployment_branch_check:
+    description: >
+      Check if GitHub Pages is configured before deploying. Set to 'false'
+      to skip safety checks. Defaults to 'true'
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
@@ -68,12 +80,54 @@ runs:
           fi
         fi
       shell: bash
+    - name: Check GitHub Pages configuration
+      if: inputs.deployment_branch_check == 'true'
+      run: |
+        echo "Checking GitHub Pages configuration..."
+        
+        # Check if Pages is enabled via GitHub API
+        PAGES_STATUS=$(curl -s -H "Authorization: token ${{ github.token }}" \
+          "https://api.github.com/repos/${{ github.repository }}/pages" \
+          | jq -r '.status // "disabled"')
+        
+        if [ "$PAGES_STATUS" = "disabled" ] || [ "$PAGES_STATUS" = "null" ]; then
+          echo "WARNING: GitHub Pages is not configured for this repository."
+          echo "Please configure GitHub Pages in repository settings before deploying."
+          echo "To skip this check, set deployment_branch_check: false"
+          
+          if [ "${{ inputs.auto_deploy }}" = "true" ]; then
+            echo "Deployment cancelled due to Pages not being configured."
+            exit 1
+          fi
+        else
+          echo "GitHub Pages is configured and ready."
+        fi
+      shell: bash
     - name: Upload GitHub Pages artifact
+      run: |
+        echo "Uploading build artifacts to GitHub Pages..."
+        echo "Artifact will be named: github-pages-${{ inputs.python_manager }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"
+      shell: bash
+    - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
         name: github-pages-${{ inputs.python_manager }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
         path: "${{ inputs.project_path }}/build"
     - name: Deploy to GitHub Pages
+      if: inputs.auto_deploy == 'true'
+      run: |
+        echo "Deploying to GitHub Pages..."
+        echo "Auto-deploy is enabled. To disable, set auto_deploy: false"
+      shell: bash
+    - name: Deploy artifact
+      if: inputs.auto_deploy == 'true'
       uses: actions/deploy-pages@v4
       with:
         artifact_name: github-pages-${{ inputs.python_manager }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+    - name: Deployment skipped notice
+      if: inputs.auto_deploy == 'false'
+      run: |
+        echo "Auto-deployment is disabled."
+        echo "Artifacts have been uploaded but not deployed."
+        echo "To deploy manually, use the GitHub Pages settings or set auto_deploy: true"
+      shell: bash
