@@ -64,4 +64,3 @@ jobs:
         with:
           project_path: "demo-project"
           python_manager: "uv"
-          auto_deploy: "false"

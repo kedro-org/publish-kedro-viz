@@ -107,7 +107,7 @@ runs:
             exit 1
           fi
         else
-          echo "GitHub Pages is enabled, proceeding to deployment."
+          echo "GitHub Pages is enabled, proceeding to uploading artifacts."
         fi
         
         # Clean up
@@ -137,7 +137,7 @@ runs:
     - name: Deployment skipped notice
       if: inputs.auto_deploy == 'false'
       run: |
-        echo "Auto-deployment is disabled."
+        echo "WARNING: Auto-deployment is disabled."
         echo "Artifacts have been uploaded but not deployed."
         echo "To deploy manually, use the GitHub Pages settings or set auto_deploy: true"
       shell: bash
