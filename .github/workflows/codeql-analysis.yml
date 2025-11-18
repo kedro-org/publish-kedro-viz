@@ -24,14 +24,11 @@ jobs:
       with:
         python-version: "3.11"
 
-    - name: Install YAML linting tools
-      run: |
-        pip install yamllint
-        pip install actionlint
+    - name: Install yamllint
+      run: pip install yamllint
 
     - name: Run yamllint
-      run: |
-        yamllint .
+      run: yamllint .
 
     - name: Download and run actionlint
       run: |
