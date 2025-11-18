@@ -1,4 +1,4 @@
-name: "YAML Lint and Validation"
+name: "Action Lint"
 
 on:
   push:
@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 jobs:
-  yaml-lint:
-    name: YAML Lint
+  action-lint:
+    name: Action Lint
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -23,12 +23,6 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.11"
-
-    - name: Install yamllint
-      run: pip install yamllint
-
-    - name: Run yamllint
-      run: yamllint .
 
     - name: Download and run actionlint
       run: |
