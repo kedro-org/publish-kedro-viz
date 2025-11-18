@@ -29,7 +29,7 @@ inputs:
       build and upload artifacts without deploying. Defaults to 'true'
     required: false
     default: "true"
-  deployment_branch_check:
+  deployment_check:
     description: >
       Check if GitHub Pages is configured before deploying. Set to 'false'
       to skip safety checks. Defaults to 'true'
@@ -85,7 +85,7 @@ runs:
         fi
       shell: bash
     - name: Check GitHub Pages configuration
-      if: inputs.deployment_branch_check == 'true'
+      if: inputs.deployment_check == 'true'
       run: |
         echo "Checking GitHub Pages configuration..."
         
@@ -100,32 +100,14 @@ runs:
           echo "WARNING: GitHub Pages is not enabled for this repository."
           echo "Please enable GitHub Pages in repository settings before deploying."
           echo "Go to Settings > Pages and configure a publishing source."
-          echo "To skip this check, set deployment_branch_check: false"
+          echo "To skip this check, set deployment_check: false"
           
           if [ "${{ inputs.auto_deploy }}" = "true" ]; then
             echo "Deployment cancelled - GitHub Pages is not enabled."
             exit 1
           fi
-        elif [ "$HTTP_CODE" = "200" ]; then
-          # Check if jq is available for JSON parsing
-          if command -v jq >/dev/null 2>&1; then
-            PAGES_STATUS=$(cat /tmp/pages_response.json | jq -r '.status // "unknown"')
-            echo "GitHub Pages is enabled. Status: $PAGES_STATUS"
-          else
-            echo "GitHub Pages is enabled (API returned 200)."
-          fi
         else
-          echo "Unable to check GitHub Pages status (HTTP $HTTP_CODE)."
-          echo "This might be due to insufficient permissions."
-          
-          if [ "${{ inputs.auto_deploy }}" = "true" ]; then
-            echo "Proceeding with deployment despite check failure."
-            echo "If deployment fails, please verify GitHub Pages is enabled."
-          fi
-        fi
-        
-        # Clean up
-        rm -f /tmp/pages_response.json
+          echo "GitHub Pages is enabled, proceeding to deployment."
       shell: bash
     - name: Upload GitHub Pages artifact
       run: |

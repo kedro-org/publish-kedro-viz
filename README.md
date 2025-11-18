@@ -83,7 +83,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
       # Check if GitHub Pages is configured before deploying.
       # Set to 'false' to skip safety checks.
       # Default: 'true'
-      deployment_branch_check: ''
+      deployment_check: ''
     
   ```
 
@@ -178,7 +178,7 @@ By default, this action automatically deploys to GitHub Pages after building art
 ```yaml
 - uses: kedro-org/publish-kedro-viz@v3
   with:
-    deployment_branch_check: false  # Skip GitHub Pages configuration check
+    deployment_check: false  # Skip GitHub Pages configuration check
 ```
 
 ### Safety Features
