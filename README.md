@@ -312,49 +312,21 @@ We use the GitHub actions [actions/upload-pages-artifact](https://github.com/act
 
 ## Privacy and Data Protection
 
-### Privacy Notice
+**This Action collects no personal data and processes only your project files locally.** 
 
-**No personal data is collected or stored by this GitHub Action.** This Action only processes your Kedro project files locally within the GitHub Actions runner environment to generate static visualization artifacts.
+For complete privacy information including:
+- Data processing details
+- Telemetry opt-out instructions  
+- GDPR/CCPA compliance
+- Your privacy rights
 
-### Data Processing Summary
-
-- **Data Processed**: Kedro project configuration files, pipeline definitions, and metadata
-- **Processing Location**: GitHub Actions runner (ephemeral environment)
-- **Data Storage**: No persistent data storage by this Action
-- **Data Transmission**: Only static HTML/JS/CSS artifacts uploaded to GitHub Pages
-
-### Telemetry and Opt-Out
-
-This Action includes an optional telemetry feature that can send usage data to Kedro-Viz:
-
-- **Default Setting**: Telemetry is **disabled by default** (`telemetry_consent: false`)
-- **Opt-In Required**: You must explicitly set `telemetry_consent: true` to enable
-- **Data Sent**: Anonymous usage statistics about Kedro-Viz features used
-- **Opt-Out Instructions**: Keep `telemetry_consent: false` (default) or omit the parameter
-
-**To disable telemetry explicitly:**
-```yaml
-- uses: kedro-org/publish-kedro-viz@v3
-  with:
-    telemetry_consent: false  # Explicitly disable (default)
-```
-
-### GDPR/CCPA Compliance
-
-This Action complies with GitHub's Data Protection Addendum and applicable data protection regulations:
-
-- No personal data collection or processing
-- No cookies or tracking mechanisms
-- No data retention beyond GitHub Actions job execution
-- Processing limited to generating static visualizations
-
-For questions about data protection, please contact: kedro-framework@mckinsey.com
+**See our [Privacy Policy](PRIVACY.md)**
 
 ## Support
 
 Need help? We're here for you!
 
-- **Support**: See [SUPPORT.md](SUPPORT.md) for complete support policy and takedown procedures
+**See our [SUPPORT.md](SUPPORT.md)** for complete support policy and takedown procedures
 
 ## Pricing
 
