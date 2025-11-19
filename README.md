@@ -354,10 +354,7 @@ For questions about data protection, please contact: kedro-framework@mckinsey.co
 
 Need help? We're here for you!
 
-- **Issues**: [Report bugs or request features](https://github.com/kedro-org/publish-kedro-viz/issues)
-- **Discussions**: [Ask questions](https://github.com/kedro-org/kedro/discussions)
-- **Slack**: [Slack](https://slack.kedro.org)  
-- **Email**: [Email Kedro](kedro-framework@mckinsey.com) for security vulnerability issues.
+- **Support**: See [SUPPORT.md](SUPPORT.md) for complete support policy and takedown procedures
 
 ## Pricing
 
