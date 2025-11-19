@@ -13,7 +13,7 @@
 
 ## Telemetry and Opt-Out
 
-This Action includes an optional telemetry feature that can send usage data to Kedro Org:
+This Action includes an optional telemetry feature input that can send usage data to Kedro Org. Based on the action input, we will write the consent value to `.telemetry` file of your kedro project.
 
 - **Default Setting**: Telemetry is **disabled by default** (`telemetry_consent: false`)
 - **Opt-In Required**: You must explicitly set `telemetry_consent: true` to enable

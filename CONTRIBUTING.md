@@ -4,7 +4,7 @@
 
 1. Fork and clone the repository
 2. Create a new branch: `git checkout -b my-branch-name`
-3. Make your change and make sure the tests in `test.yml` still pass
+3. Make your change and make sure the test workflow in `test.yml` still pass
 4. Push to your fork and submit a pull request
 
 Here are a few things you can do that will increase the likelihood of your pull request being accepted:
