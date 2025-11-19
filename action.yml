@@ -1,6 +1,6 @@
-name: publish-kedro-viz
-description: This is a GitHub action to publish kedro viz static website on GitHub Pages
-author: kedro-viz
+name: 'Publish Kedro-Viz to GitHub Pages'
+description: 'Build and publish interactive Kedro pipeline visualizations to GitHub Pages'
+author: 'kedro-org'
 
 branding:
   icon: share

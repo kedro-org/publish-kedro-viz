@@ -350,6 +350,23 @@ This Action complies with GitHub's Data Protection Addendum and applicable data 
 
 For questions about data protection, please contact: kedro-framework@mckinsey.com
 
+## Support
+
+Need help? We're here for you!
+
+- **Issues**: [Report bugs or request features](https://github.com/kedro-org/publish-kedro-viz/issues)
+- **Discussions**: [Ask questions](https://github.com/kedro-org/kedro/discussions)
+- **Slack**: [Slack](https://slack.kedro.org)  
+- **Email**: [Email Kedro](kedro-framework@mckinsey.com) for security vulnerability issues.
+
+## Pricing
+
+This action is open-source and available at no cost for:
+- Personal projects
+- Commercial use  
+- Enterprise organizations
+- No usage limits
+
 ## License
 
 publish-kedro-viz is licensed under the [Apache 2.0](https://github.com/kedro-org/publish-kedro-viz/blob/main/LICENSE.md) License.
