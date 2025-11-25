@@ -3,7 +3,7 @@
 name: Test publish-kedro-viz
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 

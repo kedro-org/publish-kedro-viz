@@ -1,6 +1,6 @@
-name: publish-kedro-viz
-description: This is a GitHub action to publish kedro viz static website on GitHub Pages
-author: kedro-viz
+name: 'Publish Kedro-Viz to GitHub Pages'
+description: 'Build and publish interactive Kedro pipeline visualizations to GitHub Pages'
+author: 'kedro-org'
 
 branding:
   icon: share
@@ -14,15 +14,27 @@ inputs:
   include_hooks:
     description: "Set whether to include hooks while creating your Kedro-project build artifacts."
     required: false
-    default: false
+    default: "false"
   telemetry_consent:
     description: "Set your consent if you would like to participate in Kedro-Telemetry. Defaults to false"
     required: false
-    default: false
+    default: "false"
   python_manager:
     description: "Set the Python package manager to use ('pip' or 'uv'). Defaults to 'pip'"
     required: false
     default: "pip"
+  auto_deploy:
+    description: >
+      Control automatic deployment to GitHub Pages. Set to 'false' to only
+      build and upload artifacts without deploying. Defaults to 'true'
+    required: false
+    default: "true"
+  deployment_check:
+    description: >
+      Check if GitHub Pages is configured before deploying. Set to 'false'
+      to skip safety checks. Defaults to 'true'
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
@@ -45,12 +57,16 @@ runs:
     - name: Consent to the use of Kedro-Telemetry
       run: |
         cd ${{ inputs.project_path }}
-        echo 'consent: ${{ inputs.telemetry_consent }}' > .telemetry
+        if [ "${{ inputs.telemetry_consent }}" = "true" ]; then
+          echo 'consent: true' > .telemetry
+        else
+          echo 'consent: false' > .telemetry
+        fi
       shell: bash
     - name: Create build flags
       run: |
         flag=""
-        if ${{ inputs.include_hooks }}; then
+        if [ "${{ inputs.include_hooks }}" = "true" ]; then
           flag="$flag --include-hooks"
         fi
         echo "build_flags=$flag" >> $GITHUB_ENV
@@ -68,12 +84,60 @@ runs:
           fi
         fi
       shell: bash
+    - name: Check GitHub Pages configuration
+      if: inputs.deployment_check == 'true'
+      run: |
+        echo "Checking GitHub Pages configuration..."
+        
+        # Check if Pages is enabled via GitHub API with proper error handling
+        HTTP_CODE=$(curl -s -w "%{http_code}" -H "Authorization: token ${{ github.token }}" \
+          "https://api.github.com/repos/${{ github.repository }}/pages" \
+          -o /tmp/pages_response.json)
+        
+        echo "GitHub Pages API response code: $HTTP_CODE"
+        
+        if [ "$HTTP_CODE" = "404" ]; then
+          echo "WARNING: GitHub Pages is not enabled for this repository."
+          echo "Please enable GitHub Pages in repository settings before deploying."
+          echo "Go to Settings > Pages and configure a publishing source."
+          echo "To skip this check, set deployment_check: false"
+          
+          if [ "${{ inputs.auto_deploy }}" = "true" ]; then
+            echo "Deployment cancelled - GitHub Pages is not enabled."
+            exit 1
+          fi
+        else
+          echo "GitHub Pages is enabled, proceeding to uploading artifacts."
+        fi
+        
+        # Clean up
+        rm -f /tmp/pages_response.json
+      shell: bash
     - name: Upload GitHub Pages artifact
+      run: |
+        echo "Uploading build artifacts to GitHub Pages..."
+        echo "Artifact will be named: github-pages-${{ inputs.python_manager }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"
+      shell: bash
+    - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
         name: github-pages-${{ inputs.python_manager }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
         path: "${{ inputs.project_path }}/build"
     - name: Deploy to GitHub Pages
+      if: inputs.auto_deploy == 'true'
+      run: |
+        echo "Deploying to GitHub Pages..."
+        echo "Auto-deploy is enabled. To disable, set auto_deploy: false"
+      shell: bash
+    - name: Deploy artifact
+      if: inputs.auto_deploy == 'true'
       uses: actions/deploy-pages@v4
       with:
         artifact_name: github-pages-${{ inputs.python_manager }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+    - name: Deployment skipped notice
+      if: inputs.auto_deploy == 'false'
+      run: |
+        echo "WARNING: Auto-deployment is disabled."
+        echo "Artifacts have been uploaded but not deployed."
+        echo "To deploy manually, use the GitHub Pages settings or set auto_deploy: true"
+      shell: bash

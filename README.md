@@ -38,7 +38,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 - **GitHub Repository:** A GitHub repository with your Kedro project.
 - **GitHub Pages Setup:** Configure your repository for [GitHub Pages](https://docs.github.com/en/pages/quickstart).
 - **Kedro-project dependencies:** Install all the Kedro-project dependencies before using this action in your workflow.
-- **Python-version:** You need to have an environment with `python>=3.9` in your workflow.
+- **Python-version:** You need to have an environment with `python>=3.10` in your workflow.
 
 > [!NOTE]
 > While configuring your repository for GitHub Pages, you have two publishing source options. You can either choose a branch or a custom GitHub Actions workflow (recommended). 
@@ -50,6 +50,7 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 
 > [!Important]
 > From `publish-kedro-viz@v2`, we only support custom GitHub Actions workflow as a publishing source for GitHub Pages.
+> From `publish-kedro-viz@v3`, we introduced inputs to support uv managed kedro projects, deployment safety checks and dropped python 3.9 support.
 
 ## Usage
 
@@ -74,6 +75,16 @@ This action helps in the automation of a deployment strategy mentioned in [platf
       # The Python package manager to use ('pip' or 'uv').
       # Default: 'pip'
       python_manager: ''
+
+      # Control automatic deployment to GitHub Pages.
+      # Set to 'false' to only build artifacts without deploying.
+      # Default: 'true'
+      auto_deploy: ''
+
+      # Check if GitHub Pages is configured before deploying.
+      # Set to 'false' to skip safety checks.
+      # Default: 'true'
+      deployment_check: ''
     
   ```
 
@@ -151,6 +162,32 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 
   ```
 
+## Deployment Control Options (from v3)
+
+### Auto-Deploy Control
+
+By default, this action automatically deploys to GitHub Pages after building artifacts. You can control this behavior:
+
+**Build Only (No Deploy):**
+```yaml
+- uses: kedro-org/publish-kedro-viz@v3
+  with:
+    auto_deploy: false  # Only build artifacts, don't deploy
+```
+
+**Skip Safety Checks:**
+```yaml
+- uses: kedro-org/publish-kedro-viz@v3
+  with:
+    deployment_check: false  # Skip GitHub Pages configuration check
+```
+
+### Safety Features
+
+- **GitHub Pages Configuration Check**: Verifies Pages is configured before deploying
+- **Opt-out Control**: Set `auto_deploy: false` to prevent automatic deployment
+- **Clear Feedback**: Action provides clear messages about deployment status
+
 ## Configure the action
 
 1. Adding the GitHub Action to your workflow:
@@ -169,7 +206,10 @@ This action helps in the automation of a deployment strategy mentioned in [platf
             
             # The contents write permission is required to use the action 
             # if your GitHub publishing source is a branch
-            contents: write 
+            
+            # The contents read permission is required to use the action
+            # if your GitHub publishing source is a workflow
+            contents: read 
             
             # The pages and id-token write permissions are required to use 
             # the action if your GitHub publishing source is a custom 
@@ -214,39 +254,40 @@ This action helps in the automation of a deployment strategy mentioned in [platf
 
 If your project uses [uv](https://docs.astral.sh/uv/) for dependency management, you can configure the workflow like this:
 
-```yaml
-name: Publish and share Kedro Viz 
+    ```yaml
+    name: Publish and share Kedro Viz 
 
-permissions:
-  pages: write 
-  id-token: write
+    permissions:
+      contents: read
+      pages: write 
+      id-token: write
 
-on: 
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+    on: 
+      push:
+        branches:
+          - main
+      workflow_dispatch:
 
-jobs: 
-  deploy:
-    runs-on: ubuntu-latest 
-    steps:
-      - name: Fetch the repository
-        uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-      - name: Set up Python
-        run: uv python install 3.11
-      - name: Install Project Dependencies
-        run: |
-          cd your-project-path
-          uv pip install -r requirements.txt
-      - name: Deploy Kedro-Viz to GH Pages 
-        uses: kedro-org/publish-kedro-viz@v3
-        with:
-          project_path: "your-project-path"
-          python_manager: "uv"
-```
+    jobs: 
+      deploy:
+        runs-on: ubuntu-latest 
+        steps:
+          - name: Fetch the repository
+            uses: actions/checkout@v4
+          - name: Install uv
+            uses: astral-sh/setup-uv@v3
+          - name: Set up Python
+            run: uv python install 3.11
+          - name: Install Project Dependencies
+            run: |
+              cd your-project-path
+              uv pip install -r requirements.txt
+          - name: Deploy Kedro-Viz to GH Pages 
+            uses: kedro-org/publish-kedro-viz@v3
+            with:
+              project_path: "your-project-path"
+              python_manager: "uv"
+    ```
 
 ## Test the action
 
@@ -268,6 +309,32 @@ We use the GitHub action [peaceiris/actions-gh-pages](https://github.com/peaceir
 ### Deploy to GitHub Pages when publishing source is a custom GitHub Action Workflow
 
 We use the GitHub actions [actions/upload-pages-artifact](https://github.com/actions/upload-pages-artifact) and [actions/deploy-pages](https://github.com/actions/deploy-pages) which are released under MIT license.
+
+## Privacy and Data Protection
+
+**This Action collects no personal data and processes only your project files locally.** 
+
+For complete privacy information including:
+- Data processing details
+- Telemetry opt-out instructions  
+- GDPR/CCPA compliance
+- Your privacy rights
+
+**See our [Privacy Policy](PRIVACY.md)**
+
+## Support
+
+Need help? We're here for you!
+
+**See our [SUPPORT.md](SUPPORT.md)** for complete support policy and takedown procedures
+
+## Pricing
+
+This action is open-source and available at no cost for:
+- Personal projects
+- Commercial use  
+- Enterprise organizations
+- No usage limits
 
 ## License
 
