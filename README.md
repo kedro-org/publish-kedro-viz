@@ -254,7 +254,7 @@ By default, this action automatically deploys to GitHub Pages after building art
 
 If your project uses [uv](https://docs.astral.sh/uv/) for dependency management, you can configure the workflow like this:
 
-    ```yaml
+```yaml
     name: Publish and share Kedro Viz 
 
     permissions:
@@ -287,7 +287,7 @@ If your project uses [uv](https://docs.astral.sh/uv/) for dependency management,
             with:
               project_path: "your-project-path"
               python_manager: "uv"
-    ```
+```
 
 ## Test the action
 
